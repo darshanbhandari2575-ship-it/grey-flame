@@ -1,4 +1,6 @@
-export default function Hero() {
+import { memo } from 'react'
+
+function Hero() {
   return (
     <section className="hero">
       <div className="hero-copy">
@@ -19,9 +21,14 @@ export default function Hero() {
           srcSet="/images/greyflame-hero.png 768w, /images/greyflame-hero.png 1080w, /images/greyflame-hero.png 1440w"
           sizes="(max-width: 900px) 62vw, 48vw"
           alt=""
+          loading="eager"
+          decoding="async"
           fetchPriority="high"
+          style={{ objectFit: "cover" }}
         />
       </div>
     </section>
   )
 }
+
+export default memo(Hero)

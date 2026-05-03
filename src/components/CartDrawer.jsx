@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import { imageSrcSet, imageUrl } from '../utils/imageUrls'
 
-export default function CartDrawer({ open, cartItems, count, giftWrap, setGiftWrap, onClose, onRemove, onUpdateQty, onCheckout }) {
+function CartDrawer({ open, cartItems, count, giftWrap, setGiftWrap, onClose, onRemove, onUpdateQty, onCheckout }) {
   return (
     <div className={`drawer ${open ? 'open' : ''}`}>
       <div className="dh"><h3>your bag</h3><button className="cl" onClick={onClose}>x</button></div>
@@ -17,6 +18,8 @@ export default function CartDrawer({ open, cartItems, count, giftWrap, setGiftWr
                   sizes="70px"
                   alt={product.name}
                   loading="lazy"
+                  decoding="async"
+                  style={{ objectFit: "cover" }}
                   onError={(e) => { e.currentTarget.style.display = 'none' }}
                 />
               </div>
@@ -42,3 +45,5 @@ export default function CartDrawer({ open, cartItems, count, giftWrap, setGiftWr
     </div>
   )
 }
+
+export default memo(CartDrawer)

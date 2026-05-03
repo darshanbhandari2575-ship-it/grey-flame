@@ -1,4 +1,6 @@
-export default function Marquee() {
+import { memo } from 'react'
+
+function Marquee() {
   return (
     <div className="mq">
       <div className="mt">
@@ -14,3 +16,5 @@ export default function Marquee() {
     </div>
   )
 }
+
+export default memo(Marquee)

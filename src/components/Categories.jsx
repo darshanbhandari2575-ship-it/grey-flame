@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { imageSrcSet, imageUrl } from '../utils/imageUrls'
 
 const categories = [
@@ -6,7 +7,7 @@ const categories = [
   ['resin', '03', 'Resin', 'resin-art.jpg'],
 ]
 
-export default function Categories({ onSelect }) {
+function Categories({ onSelect }) {
   return (
     <section className="cats">
       <h2>three quiet collections.</h2>
@@ -21,6 +22,8 @@ export default function Categories({ onSelect }) {
               className="cat-img"
               alt=""
               loading="lazy"
+              decoding="async"
+              style={{ objectFit: "cover" }}
             />
             <div className="lb">
               <small>{num}</small>
@@ -32,3 +35,5 @@ export default function Categories({ onSelect }) {
     </section>
   )
 }
+
+export default memo(Categories)

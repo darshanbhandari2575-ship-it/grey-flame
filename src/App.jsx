@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
@@ -38,9 +38,9 @@ export default function App() {
     window.scrollTo(0, 0)
   }, [view])
 
-  const go = (nextView) => setView(nextView)
+  const go = useCallback((nextView) => setView((current) => current === nextView ? current : nextView), [])
 
-  const addToBag = (id, customization = '') => {
+  const addToBag = useCallback((id, customization = '') => {
     const details = customization.trim()
     const key = `${id}::${details}`
     setCart((prev) => {
@@ -49,36 +49,39 @@ export default function App() {
       return [...prev, { id, key, customization: details, qty: 1 }]
     })
     setToastMessage(details ? 'customized piece added' : 'added to bag')
-  }
+  }, [])
 
-  const removeFromBag = (key) => {
+  const removeFromBag = useCallback((key) => {
     setCart((prev) => prev.filter((item) => item.key !== key))
-  }
+  }, [])
 
-  const updateQty = (key, delta) => {
+  const updateQty = useCallback((key, delta) => {
     setCart((prev) => prev.flatMap((item) => {
       if (item.key !== key) return [item]
       const qty = item.qty + delta
       return qty <= 0 ? [] : [{ ...item, qty }]
     }))
-  }
+  }, [])
 
-  const openProduct = (id) => {
-    setSelectedId(id)
+  const openProduct = useCallback((id) => {
+    setSelectedId((current) => current === id ? current : id)
     setRecent((prev) => [id, ...prev.filter((item) => item !== id)].slice(0, 5))
-    setView('product')
-  }
+    setView((current) => current === 'product' ? current : 'product')
+  }, [])
 
-  const selectCategory = (category) => {
-    setFilter(category)
-    setView('shop')
-  }
+  const selectCategory = useCallback((category) => {
+    setFilter((current) => current === category ? current : category)
+    setView((current) => current === 'shop' ? current : 'shop')
+  }, [])
 
-  const askWhatsApp = (name) => {
+  const askWhatsApp = useCallback((name) => {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`hi! i'd like to know more about: ${name}`)}`, '_blank')
-  }
+  }, [])
 
-  const checkout = () => {
+  const openCart = useCallback(() => setDrawerOpen((current) => current ? current : true), [])
+  const closeCart = useCallback(() => setDrawerOpen((current) => current ? false : current), [])
+
+  const checkout = useCallback(() => {
     if (cart.length === 0) {
       setToastMessage('your bag is empty')
       return
@@ -94,12 +97,12 @@ export default function App() {
     if (giftWrap) msg += '\n+ gift wrap (Rs. 99)'
     msg += '\n\nplease share total & payment details. thank you!'
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank')
-  }
+  }, [cart, giftWrap])
 
   return (
     <>
       <div className="grain"></div>
-      <Nav onGo={go} count={count} onOpenCart={() => setDrawerOpen(true)} />
+      <Nav onGo={go} count={count} onOpenCart={openCart} />
 
       <div className={`view ${view === 'home' ? 'active' : ''}`}>
         <Hero />
@@ -123,7 +126,7 @@ export default function App() {
         <div className="contact-v"><span className="micro" style={{ color: 'var(--ember)' }}>say hello</span><h1>let&apos;s <em>talk.</em></h1><p>WhatsApp us, dm us on instagram, or send a slow letter.</p><p style={{ marginTop: '30px' }}><a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn">WhatsApp the studio</a></p></div>
       </div>
 
-      <CartDrawer open={drawerOpen} cartItems={cartItems} count={count} giftWrap={giftWrap} setGiftWrap={setGiftWrap} onClose={() => setDrawerOpen(false)} onRemove={removeFromBag} onUpdateQty={updateQty} onCheckout={checkout} />
+      <CartDrawer open={drawerOpen} cartItems={cartItems} count={count} giftWrap={giftWrap} setGiftWrap={setGiftWrap} onClose={closeCart} onRemove={removeFromBag} onUpdateQty={updateQty} onCheckout={checkout} />
       <Footer onGo={go} />
       <Toast message={toastMessage} />
     </>

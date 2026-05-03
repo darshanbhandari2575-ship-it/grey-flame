@@ -1,7 +1,8 @@
+import { memo } from 'react'
 import { CATS } from '../data/products'
 import { imageSrcSet, imageUrl } from '../utils/imageUrls'
 
-export default function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }) {
+function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }) {
   if (!product) return null
 
   const price = product.price ? `Rs. ${product.price}` : 'Price on request'
@@ -16,6 +17,8 @@ export default function ProductDetail({ product, recentlyViewed, onOpen, onAdd, 
             sizes="(max-width: 900px) 100vw, 50vw"
             alt={product.name}
             loading="lazy"
+            decoding="async"
+            style={{ objectFit: "cover" }}
             onError={(e) => { e.currentTarget.style.display = 'none' }}
           />
         </div>
@@ -43,6 +46,8 @@ export default function ProductDetail({ product, recentlyViewed, onOpen, onAdd, 
                     sizes="(max-width: 900px) 50vw, 25vw"
                     alt={item.name}
                     loading="lazy"
+                    decoding="async"
+                    style={{ objectFit: "cover" }}
                     onError={(e) => { e.currentTarget.style.display = 'none' }}
                   />
                 </div>
@@ -55,3 +60,5 @@ export default function ProductDetail({ product, recentlyViewed, onOpen, onAdd, 
     </>
   )
 }
+
+export default memo(ProductDetail)

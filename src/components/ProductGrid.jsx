@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { CATS } from '../data/products'
 import { imageSrcSet, imageUrl } from '../utils/imageUrls'
 
-function ProductCard({ product, onOpen, onAdd }) {
+const ProductCard = memo(function ProductCard({ product, onOpen, onAdd }) {
   const [customizing, setCustomizing] = useState(false)
   const [customization, setCustomization] = useState('')
   const isConcrete = product.category === 'concrete'
@@ -26,6 +26,8 @@ function ProductCard({ product, onOpen, onAdd }) {
           sizes="(max-width: 900px) 50vw, 25vw"
           alt={product.name}
           loading="lazy"
+          decoding="async"
+          style={{ objectFit: "cover" }}
           onError={(e) => { e.currentTarget.style.display = 'none' }}
         />
         <div className={`qa-row ${isConcrete ? 'with-custom' : ''}`}>
@@ -53,9 +55,9 @@ function ProductCard({ product, onOpen, onAdd }) {
       )}
     </div>
   )
-}
+})
 
-export default function ProductGrid({ products, filter, setFilter, onOpen, onAdd }) {
+function ProductGrid({ products, filter, setFilter, onOpen, onAdd }) {
   const list = filter === 'all' ? products : products.filter((p) => p.category === filter)
 
   return (
@@ -79,3 +81,5 @@ export default function ProductGrid({ products, filter, setFilter, onOpen, onAdd
     </>
   )
 }
+
+export default memo(ProductGrid)
