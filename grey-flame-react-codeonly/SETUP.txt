@@ -1,0 +1,5 @@
+1. Extract this zip.
+2. Extract your product image zips.
+3. Copy all product images into public/images exactly as named in image-manifest.txt.
+4. Run npm install
+5. Run npm run dev

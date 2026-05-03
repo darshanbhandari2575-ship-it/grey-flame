@@ -1,0 +1,62 @@
+Place the following image files in this folder exactly as named:
+
+Big shell.jpg
+Bubble tray (1).jpg
+Conch.jpg
+Dual tray.jpg
+Dual tray customisation.jpg
+Lotus jar.jpg
+Lotus jar + tray combo.jpg
+Lotus jar collection.jpg
+Star fish dish.jpg
+Tray + Planter girl.jpg
+Tray + Rose jar.jpg
+Tray + lotus jar + vase combo.jpg
+Tray.jpg
+lotus bud tea light holder.jpg
+small shell trinket tray.jpg
+Bloomed lotus candle_.jpg
+Floating daisy candles 1.jpg
+Lotus bud candles_.jpg
+Mithai candles_.jpg
+Peony candles_.jpg
+3 Lotus candle 3.5_ urli.jpg
+Floral blooms daisy 3.5_ urli.jpg
+Floral blooms periwinkle 3.5_ urli.jpg
+Floral blooms pink roses 3.5_ urli.jpg
+Floral blooms sunflower 3.5_ urli.jpg
+Floral blooms white & yellow 3.5_ urli.jpg
+Floral blooms yellow dried flowers 3.5_ urli.jpg
+Floral blooms yellow roses 3.5_ urli.jpg
+Jasmine Serenity 3.5_ urli.jpg
+Lotus pond 3.5_ urli_.jpg
+Chandrika 5.5_ Urli.jpg
+Gulgaura 5.5_ Urli.jpg
+Kamalini 5.5_ Urli.jpg
+Manorama 5.5_ Urli.jpg
+Padmasar 5.5_ Urli.jpg
+2D Christmas tree_.webp
+2D Christmas tree pastel.webp
+3D Christmas candle.webp
+Christmas house candle_.webp
+Christmas wax sachet.webp
+Concrete Christmas figurines.webp
+Copy of Snowflakes candle_.webp
+Reindeers_.webp
+Rudolf Candle_.jpg
+Santa & Rudolf Candle.jpg
+Snowman candle_.webp
+Stackable christmas tree.webp
+Winter wonderland_.webp
+IMG-20260127-WA0037.jpg
+IMG-20260204-WA0052.jpg
+IMG-20260204-WA0061.jpg
+IMG-20260204-WA0062.jpg
+IMG-20260204-WA0063.jpg
+IMG-20260204-WA0070.jpg
+IMG-20260204-WA0077.jpg
+IMG-20260204-WA0078.jpg
+IMG-20260204-WA0083.jpg
+IMG-20260219-WA0007.jpg
+IMG-20260219-WA0008.jpg
+IMG_20260120_181010357.jpg
