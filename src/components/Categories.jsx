@@ -19,7 +19,7 @@ function Categories({ onSelect }) {
           return (
             <div key={key} className="cc" onClick={() => onSelect(key)}>
               <img
-                src={imageUrl(img)}
+                src={imageUrl(img, 768)}
                 srcSet={imageSrcSet(img)}
                 sizes="(max-width: 900px) 100vw, 33vw"
                 className="cat-img"

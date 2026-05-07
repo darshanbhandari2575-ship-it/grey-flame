@@ -16,7 +16,7 @@ function CartDrawer({ open, cartItems, count, giftWrap, setGiftWrap, onClose, on
               <div className="ci" key={key}>
                 <div className="im">
                   <img
-                    src={imageUrl(product.img)}
+                    src={imageUrl(product.img, 160)}
                     srcSet={imageSrcSet(product.img, [160, 320, 480])}
                     sizes="70px"
                     alt={product.name}

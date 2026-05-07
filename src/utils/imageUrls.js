@@ -1,4 +1,6 @@
-const CLOUDINARY_BASE_URL = import.meta.env.VITE_CLOUDINARY_BASE_URL || ''
+const CLOUDINARY_BASE_URL = import.meta.env?.VITE_CLOUDINARY_BASE_URL || ''
+const DEFAULT_IMAGE_WIDTH = 768
+const OPTIMIZED_WIDTHS = [160, 320, 480, 768, 1080, 1440]
 
 const IMAGE_DIMENSIONS = {
   '2D Christmas tree pastel.webp': { width: 1080, height: 1920 },
@@ -57,16 +59,41 @@ const IMAGE_DIMENSIONS = {
 }
 
 export function imageUrl(fileName, width) {
-  if (!CLOUDINARY_BASE_URL || fileName.includes('+')) return `/images/${encodeURIComponent(fileName)}`
+  if (!CLOUDINARY_BASE_URL || fileName.includes('+')) {
+    const dimensions = imageDimensions(fileName)
+    const requestedWidth = width || DEFAULT_IMAGE_WIDTH
+    const optimizedWidth = dimensions
+      ? [...OPTIMIZED_WIDTHS].reverse().find((candidate) => candidate <= requestedWidth && candidate <= dimensions.width)
+      : requestedWidth
+
+    if (optimizedWidth) {
+      return `/images/optimized/${optimizedImageName(fileName, optimizedWidth)}`
+    }
+
+    return `/images/${encodeURIComponent(fileName)}`
+  }
 
   const transformations = width ? `f_auto,q_80,w_${width},c_limit` : 'f_auto,q_80'
   return `${CLOUDINARY_BASE_URL.replace(/\/$/, '')}/${transformations}/${encodeURIComponent(fileName)}`
 }
 
 export function imageSrcSet(fileName, widths = [480, 768, 1080]) {
-  return widths.map((width) => `${imageUrl(fileName, width)} ${width}w`).join(', ')
+  const dimensions = imageDimensions(fileName)
+  const availableWidths = dimensions ? widths.filter((width) => width <= dimensions.width) : widths
+
+  return availableWidths.map((width) => `${imageUrl(fileName, width)} ${width}w`).join(', ')
 }
 
 export function imageDimensions(fileName) {
   return IMAGE_DIMENSIONS[fileName]
+}
+
+export function optimizedImageName(fileName, width) {
+  const slug = fileName
+    .replace(/\.[^.]+$/, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+  return `${slug}-${width}.webp`
 }

@@ -1,6 +1,8 @@
 import { memo } from 'react'
 
 function Hero() {
+  const heroImage = '/images/optimized/greyflame-hero-1440.webp'
+
   return (
     <section className="hero">
       <div className="hero-copy">
@@ -17,8 +19,8 @@ function Hero() {
       </div>
       <div className="hero-art" aria-hidden="true">
         <img
-          src="/images/greyflame-hero.png"
-          srcSet="/images/greyflame-hero.png 768w, /images/greyflame-hero.png 1080w, /images/greyflame-hero.png 1440w"
+          src={heroImage}
+          srcSet="/images/optimized/greyflame-hero-768.webp 768w, /images/optimized/greyflame-hero-1080.webp 1080w, /images/optimized/greyflame-hero-1440.webp 1440w"
           sizes="(max-width: 900px) 62vw, 48vw"
           alt=""
           width="1672"

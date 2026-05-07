@@ -13,7 +13,7 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
       <div className="pdv">
         <div className="pim">
           <img
-            src={imageUrl(product.img)}
+            src={imageUrl(product.img, 1080)}
             srcSet={imageSrcSet(product.img, [768, 1080, 1440])}
             sizes="(max-width: 900px) 100vw, 50vw"
             alt={product.name}
@@ -46,7 +46,7 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
                 <div key={item.id} className="p" onClick={() => onOpen(item.id)}>
                   <div className="img">
                     <img
-                      src={imageUrl(item.img)}
+                      src={imageUrl(item.img, 480)}
                       srcSet={imageSrcSet(item.img)}
                       sizes="(max-width: 900px) 50vw, 25vw"
                       alt={item.name}

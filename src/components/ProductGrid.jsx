@@ -23,7 +23,7 @@ const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd })
     <div className="p">
       <div className="img" onClick={() => onOpen(product.id)}>
         <img
-          src={imageUrl(product.img)}
+          src={imageUrl(product.img, 480)}
           srcSet={imageSrcSet(product.img)}
           sizes="(max-width: 900px) 50vw, 25vw"
           alt={product.name}
