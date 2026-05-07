@@ -1,11 +1,12 @@
 import { memo } from 'react'
 import { CATS } from '../data/products'
-import { imageSrcSet, imageUrl } from '../utils/imageUrls'
+import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
 function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }) {
   if (!product) return null
 
   const price = product.price ? `Rs. ${product.price}` : 'Price on request'
+  const dimensions = imageDimensions(product.img)
 
   return (
     <>
@@ -16,8 +17,9 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
             srcSet={imageSrcSet(product.img, [768, 1080, 1440])}
             sizes="(max-width: 900px) 100vw, 50vw"
             alt={product.name}
-            loading="lazy"
-            decoding="async"
+            width={dimensions?.width}
+            height={dimensions?.height}
+            loading="eager"
             style={{ objectFit: "cover" }}
             onError={(e) => { e.currentTarget.style.display = 'none' }}
           />
@@ -37,23 +39,28 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
         <div className="rv">
           <h3>recently viewed.</h3>
           <div className="rv-grid">
-            {recentlyViewed.map((item) => (
-              <div key={item.id} className="p" onClick={() => onOpen(item.id)}>
-                <div className="img">
-                  <img
-                    src={imageUrl(item.img)}
-                    srcSet={imageSrcSet(item.img)}
-                    sizes="(max-width: 900px) 50vw, 25vw"
-                    alt={item.name}
-                    loading="lazy"
-                    decoding="async"
-                    style={{ objectFit: "cover" }}
-                    onError={(e) => { e.currentTarget.style.display = 'none' }}
-                  />
+            {recentlyViewed.map((item) => {
+              const itemDimensions = imageDimensions(item.img)
+
+              return (
+                <div key={item.id} className="p" onClick={() => onOpen(item.id)}>
+                  <div className="img">
+                    <img
+                      src={imageUrl(item.img)}
+                      srcSet={imageSrcSet(item.img)}
+                      sizes="(max-width: 900px) 50vw, 25vw"
+                      alt={item.name}
+                      width={itemDimensions?.width}
+                      height={itemDimensions?.height}
+                      loading="lazy"
+                      style={{ objectFit: "cover" }}
+                      onError={(e) => { e.currentTarget.style.display = 'none' }}
+                    />
+                  </div>
+                  <h4>{item.name}</h4>
                 </div>
-                <h4>{item.name}</h4>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}

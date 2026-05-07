@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { imageSrcSet, imageUrl } from '../utils/imageUrls'
+import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
 const categories = [
   ['concrete', '01', 'Concrete Art', 'Big shell.jpg'],
@@ -13,24 +13,29 @@ function Categories({ onSelect }) {
       <h2>three quiet collections.</h2>
 
       <div className="cg">
-        {categories.map(([key, num, title, img]) => (
-          <div key={key} className="cc" onClick={() => onSelect(key)}>
-            <img
-              src={imageUrl(img)}
-              srcSet={imageSrcSet(img)}
-              sizes="(max-width: 900px) 100vw, 33vw"
-              className="cat-img"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              style={{ objectFit: "cover" }}
-            />
-            <div className="lb">
-              <small>{num}</small>
-              <h3>{title}</h3>
+        {categories.map(([key, num, title, img]) => {
+          const dimensions = imageDimensions(img)
+
+          return (
+            <div key={key} className="cc" onClick={() => onSelect(key)}>
+              <img
+                src={imageUrl(img)}
+                srcSet={imageSrcSet(img)}
+                sizes="(max-width: 900px) 100vw, 33vw"
+                className="cat-img"
+                alt=""
+                width={dimensions?.width}
+                height={dimensions?.height}
+                loading="lazy"
+                style={{ objectFit: "cover" }}
+              />
+              <div className="lb">
+                <small>{num}</small>
+                <h3>{title}</h3>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )

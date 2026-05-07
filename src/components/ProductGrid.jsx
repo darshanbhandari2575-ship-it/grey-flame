@@ -1,12 +1,14 @@
 import { memo, useState } from 'react'
 import { CATS } from '../data/products'
-import { imageSrcSet, imageUrl } from '../utils/imageUrls'
+import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
-const ProductCard = memo(function ProductCard({ product, onOpen, onAdd }) {
+const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd }) {
   const [customizing, setCustomizing] = useState(false)
   const [customization, setCustomization] = useState('')
   const isConcrete = product.category === 'concrete'
   const price = product.price ? `Rs. ${product.price}` : 'Price on request'
+  const dimensions = imageDimensions(product.img)
+  const loading = index < 4 ? 'eager' : 'lazy'
 
   const addWithCustomization = (event) => {
     event.stopPropagation()
@@ -25,8 +27,9 @@ const ProductCard = memo(function ProductCard({ product, onOpen, onAdd }) {
           srcSet={imageSrcSet(product.img)}
           sizes="(max-width: 900px) 50vw, 25vw"
           alt={product.name}
-          loading="lazy"
-          decoding="async"
+          width={dimensions?.width}
+          height={dimensions?.height}
+          loading={loading}
           style={{ objectFit: "cover" }}
           onError={(e) => { e.currentTarget.style.display = 'none' }}
         />
@@ -71,8 +74,8 @@ function ProductGrid({ products, filter, setFilter, onOpen, onAdd }) {
       </div>
       {list.length > 0 ? (
         <div className="pg">
-          {list.map((product) => (
-            <ProductCard key={product.id} product={product} onOpen={onOpen} onAdd={onAdd} />
+          {list.map((product, index) => (
+            <ProductCard key={product.id} product={product} index={index} onOpen={onOpen} onAdd={onAdd} />
           ))}
         </div>
       ) : (

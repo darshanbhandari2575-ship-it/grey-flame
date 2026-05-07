@@ -21,8 +21,9 @@ function Hero() {
           srcSet="/images/greyflame-hero.png 768w, /images/greyflame-hero.png 1080w, /images/greyflame-hero.png 1440w"
           sizes="(max-width: 900px) 62vw, 48vw"
           alt=""
+          width="1672"
+          height="941"
           loading="eager"
-          decoding="async"
           fetchPriority="high"
           style={{ objectFit: "cover" }}
         />
