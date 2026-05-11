@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { CATS } from '../data/products'
+import { CANDLE_SUBCATEGORIES, CATS, candleSubcategory } from '../data/products'
 import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
 const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd }) {
@@ -61,7 +61,13 @@ const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd })
 })
 
 function ProductGrid({ products, filter, setFilter, onOpen, onAdd }) {
-  const list = filter === 'all' ? products : products.filter((p) => p.category === filter)
+  const isCandleFilter = filter === 'candles' || filter.startsWith('candles:')
+  const candleFilter = filter.startsWith('candles:') ? filter.split(':')[1] : null
+  const list = filter === 'all'
+    ? products
+    : isCandleFilter
+      ? products.filter((product) => product.category === 'candles' && (!candleFilter || candleSubcategory(product) === candleFilter))
+      : products.filter((p) => p.category === filter)
 
   return (
     <>
@@ -69,9 +75,22 @@ function ProductGrid({ products, filter, setFilter, onOpen, onAdd }) {
       <div className="fl">
         <button className={filter === 'all' ? 'on' : ''} onClick={() => setFilter('all')}>all</button>
         {Object.keys(CATS).map((key) => (
-          <button key={key} className={filter === key ? 'on' : ''} onClick={() => setFilter(key)}>{CATS[key]}</button>
+          <button key={key} className={(key === 'candles' ? isCandleFilter : filter === key) ? 'on' : ''} onClick={() => setFilter(key)}>{CATS[key]}</button>
         ))}
       </div>
+      {isCandleFilter && (
+        <div className="fl">
+          {CANDLE_SUBCATEGORIES.map((subcategory) => (
+            <button
+              key={subcategory.key}
+              className={candleFilter === subcategory.key ? 'on' : ''}
+              onClick={() => setFilter(`candles:${subcategory.key}`)}
+            >
+              {subcategory.label}
+            </button>
+          ))}
+        </div>
+      )}
       {list.length > 0 ? (
         <div className="pg">
           {list.map((product, index) => (

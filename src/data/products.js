@@ -48,10 +48,10 @@ export const PRODUCTS = [
   { id: 'xm11', name: 'Snowman Candle', category: 'candles', img: 'Snowman candle_.webp' },
   { id: 'xm12', name: 'Stackable Christmas Tree', category: 'candles', img: 'Stackable christmas tree.webp' },
   { id: 'xm13', name: 'Winter Wonderland Candle', category: 'candles', img: 'Winter wonderland_.webp' },
-  { id: 'bq01', name: 'Scarlet Tulip Tray', category: 'candles', img: 'IMG-20260127-WA0037.jpg' },
-  { id: 'bq02', name: 'Crimson Tulip Cluster', category: 'candles', img: 'IMG-20260204-WA0062.jpg' },
-  { id: 'bq03', name: 'Mini Tulip Bouquet', category: 'candles', img: 'IMG-20260204-WA0083.jpg' },
-  { id: 'bq04', name: 'Mixed Bloom Bouquet', category: 'candles', img: 'IMG_20260120_181010357.jpg' },
+  { id: 'bq01', name: 'Scarlet Candle Bouquet', category: 'candles', img: 'IMG-20260127-WA0037.jpg' },
+  { id: 'bq02', name: 'Crimson Wax Arrangement', category: 'candles', img: 'IMG-20260204-WA0062.jpg' },
+  { id: 'bq03', name: 'Mini Floral Bouquet', category: 'candles', img: 'IMG-20260204-WA0083.jpg' },
+  { id: 'bq04', name: 'Mixed Bloom Cluster', category: 'candles', img: 'IMG_20260120_181010357.jpg' },
 
   { id: 'rs01', name: 'Ocean Shell Plaque', category: 'resin', img: 'Personalized Seashell Resin Plaque.png' },
   { id: 'rs02', name: 'Amethyst Gift Plate', category: 'resin', img: 'Birthday Resin Keepsake.png' },
@@ -63,6 +63,31 @@ export const CATS = {
   concrete: 'Concrete Art',
   candles: 'Candles',
   resin: 'Resin',
+}
+
+export const CANDLE_SUBCATEGORIES = [
+  { key: 'christmas', label: 'Christmas' },
+  { key: 'diwali-35', label: 'Diwali 3.5 inch urli' },
+  { key: 'diwali-55', label: 'Diwali 5.5 inch urli' },
+  { key: 'bouquets', label: 'Bouquets' },
+  { key: 'top-tier', label: 'Top Tier Candles' },
+]
+
+export function candleSubcategory(product) {
+  if (product.category !== 'candles') return null
+
+  const fileName = product.img.toLowerCase()
+  const isChristmas = ['christmas', 'santa', 'reindeer', 'xmas', 'snowflake', 'rudolf', 'snowman', 'winter wonderland'].some((term) => fileName.includes(term))
+  if (isChristmas) return 'christmas'
+
+  const isDiwali = fileName.includes('diwali') || fileName.includes('urli')
+  if (isDiwali && fileName.includes('3.5')) return 'diwali-35'
+  if (isDiwali && fileName.includes('5.5')) return 'diwali-55'
+
+  const isGenericFileName = /(?:^|[-_])(?:img|dsc)[-_]/i.test(product.img)
+  if (isGenericFileName) return 'bouquets'
+
+  return 'top-tier'
 }
 
 export const WHATSAPP_NUMBER = '919967483040'
