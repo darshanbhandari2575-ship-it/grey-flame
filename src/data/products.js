@@ -53,10 +53,10 @@ export const PRODUCTS = [
   { id: 'bq03', name: 'Mini Tulip Bouquet', category: 'candles', img: 'IMG-20260204-WA0083.jpg' },
   { id: 'bq04', name: 'Mixed Bloom Bouquet', category: 'candles', img: 'IMG_20260120_181010357.jpg' },
 
-  { id: 'rs01', name: 'Ocean Shell Plaque', category: 'resin', img: 'Personalized Seashell Resin Plaque.png', price: 899 },
-  { id: 'rs02', name: 'Amethyst Gift Plate', category: 'resin', img: 'Birthday Resin Keepsake.png', price: 599 },
-  { id: 'rs03', name: 'Crystal Thank You Plate', category: 'resin', img: 'Mithra Thank You Resin Plaque.png', price: 699 },
-  { id: 'rs04', name: 'Emerald Photo Plaque', category: 'resin', img: 'Birthday Photo Resin Plaque.png', price: 849 },
+  { id: 'rs01', name: 'Ocean Shell Plaque', category: 'resin', img: 'Personalized Seashell Resin Plaque.png' },
+  { id: 'rs02', name: 'Amethyst Gift Plate', category: 'resin', img: 'Birthday Resin Keepsake.png' },
+  { id: 'rs03', name: 'Crystal Thank You Plate', category: 'resin', img: 'Mithra Thank You Resin Plaque.png' },
+  { id: 'rs04', name: 'Emerald Photo Plaque', category: 'resin', img: 'Birthday Photo Resin Plaque.png' },
 ]
 
 export const CATS = {
