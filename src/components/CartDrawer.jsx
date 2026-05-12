@@ -10,7 +10,7 @@ function CartDrawer({ open, cartItems, count, giftWrap, setGiftWrap, onClose, on
           <div className="empty">your bag is empty.<br />start with something soft.</div>
         ) : (
           cartItems.map(({ product, qty, key, customization }) => {
-            const dimensions = imageDimensions(product.img)
+            const dimensions = product.imageDimensions || imageDimensions(product.img)
 
             return (
               <div className="ci" key={key}>

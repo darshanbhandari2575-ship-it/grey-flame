@@ -7,15 +7,18 @@ import ProductGrid from './components/ProductGrid'
 import ProductDetail from './components/ProductDetail'
 import CartDrawer from './components/CartDrawer'
 import Footer from './components/Footer'
+import AdminPanel from './components/AdminPanel'
 import { PRODUCTS, WHATSAPP_NUMBER } from './data/products'
+import { readAdminProducts } from './utils/adminProducts'
 
 function Toast({ message }) {
   return <div className={`toast ${message ? 'show' : ''}`}>{message}</div>
 }
 
 export default function App() {
-  const [view, setView] = useState('home')
+  const [view, setView] = useState(() => window.location.pathname === '/admin' ? 'admin' : 'home')
   const [filter, setFilter] = useState('all')
+  const [adminProducts, setAdminProducts] = useState(() => readAdminProducts())
   const [cart, setCart] = useState([])
   const [recent, setRecent] = useState([])
   const [selectedId, setSelectedId] = useState(null)
@@ -24,9 +27,16 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState('')
 
   const count = useMemo(() => cart.reduce((sum, item) => sum + item.qty, 0), [cart])
-  const selectedProduct = useMemo(() => PRODUCTS.find((item) => item.id === selectedId) || null, [selectedId])
-  const recentlyViewed = useMemo(() => recent.filter((id) => id !== selectedId).slice(0, 4).map((id) => PRODUCTS.find((item) => item.id === id)).filter(Boolean), [recent, selectedId])
-  const cartItems = useMemo(() => cart.map((item) => ({ ...item, product: PRODUCTS.find((p) => p.id === item.id) })).filter((item) => item.product), [cart])
+  const products = useMemo(() => {
+    const adminById = new Map(adminProducts.map((product) => [product.id, product]))
+    const mergedProducts = PRODUCTS.map((product) => adminById.get(product.id) || product)
+    const addedProducts = adminProducts.filter((product) => !PRODUCTS.some((item) => item.id === product.id))
+
+    return [...mergedProducts, ...addedProducts]
+  }, [adminProducts])
+  const selectedProduct = useMemo(() => products.find((item) => item.id === selectedId) || null, [products, selectedId])
+  const recentlyViewed = useMemo(() => recent.filter((id) => id !== selectedId).slice(0, 4).map((id) => products.find((item) => item.id === id)).filter(Boolean), [products, recent, selectedId])
+  const cartItems = useMemo(() => cart.map((item) => ({ ...item, product: products.find((p) => p.id === item.id) })).filter((item) => item.product), [cart, products])
 
   useEffect(() => {
     if (!toastMessage) return undefined
@@ -38,7 +48,15 @@ export default function App() {
     window.scrollTo(0, 0)
   }, [view])
 
-  const go = useCallback((nextView) => setView((current) => current === nextView ? current : nextView), [])
+  const go = useCallback((nextView) => {
+    if (nextView === 'admin') {
+      window.history.pushState(null, '', '/admin')
+    } else if (window.location.pathname === '/admin') {
+      window.history.pushState(null, '', '/')
+    }
+
+    setView((current) => current === nextView ? current : nextView)
+  }, [])
 
   const addToBag = useCallback((id, customization = '') => {
     const details = customization.trim()
@@ -74,6 +92,8 @@ export default function App() {
     setView((current) => current === 'shop' ? current : 'shop')
   }, [])
 
+  const goHome = useCallback(() => go('home'), [go])
+
   const askWhatsApp = useCallback((name) => {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`hi! i'd like to know more about: ${name}`)}`, '_blank')
   }, [])
@@ -86,9 +106,9 @@ export default function App() {
       setToastMessage('your bag is empty')
       return
     }
-    let msg = "hi grey flame! i'd like to order:\n\n"
+    let msg = "hi greyflames! i'd like to order:\n\n"
     cart.forEach((item) => {
-      const product = PRODUCTS.find((p) => p.id === item.id)
+      const product = products.find((p) => p.id === item.id)
       if (product) {
         msg += `- ${product.name} x ${item.qty}\n`
         if (item.customization) msg += `  Customization: ${item.customization}\n`
@@ -97,7 +117,7 @@ export default function App() {
     if (giftWrap) msg += '\n+ gift wrap (Rs. 99)'
     msg += '\n\nplease share total & payment details. thank you!'
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank')
-  }, [cart, giftWrap])
+  }, [cart, giftWrap, products])
 
   return (
     <>
@@ -111,7 +131,7 @@ export default function App() {
       </div>
 
       <div className={`view ${view === 'shop' ? 'active' : ''}`}>
-        <ProductGrid products={PRODUCTS} filter={filter} setFilter={setFilter} onOpen={openProduct} onAdd={addToBag} />
+        <ProductGrid products={products} filter={filter} setFilter={setFilter} onOpen={openProduct} onAdd={addToBag} />
       </div>
 
       <div className={`view ${view === 'product' ? 'active' : ''}`}>
@@ -119,11 +139,15 @@ export default function App() {
       </div>
 
       <div className={`view ${view === 'about' ? 'active' : ''}`}>
-        <div className="about-v"><span className="micro" style={{ color: 'var(--ember)' }}>the studio</span><h1>made by hand,<br /><em>lit by hour.</em></h1><p>grey flame is a quiet little studio working with wax, resin and concrete - shaping pieces that don't shout, but stay with you.</p><p>every piece is poured, set, and finished by hand. no two are quite alike. that's the whole point.</p></div>
+        <div className="about-v"><span className="micro" style={{ color: 'var(--ember)' }}>the studio</span><h1>made by hand,<br /><em>lit by hour.</em></h1><p>greyflames is a quiet little studio working with wax, resin and concrete - shaping pieces that don't shout, but stay with you.</p><p>every piece is poured, set, and finished by hand. no two are quite alike. that's the whole point.</p></div>
       </div>
 
       <div className={`view ${view === 'contact' ? 'active' : ''}`}>
         <div className="contact-v"><span className="micro" style={{ color: 'var(--ember)' }}>say hello</span><h1>let&apos;s <em>talk.</em></h1><p>WhatsApp us, dm us on instagram, or send a slow letter.</p><p style={{ marginTop: '30px' }}><a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn">WhatsApp the studio</a></p></div>
+      </div>
+
+      <div className={`view ${view === 'admin' ? 'active' : ''}`}>
+        <AdminPanel products={products} onGoHome={goHome} onProductsChange={setAdminProducts} />
       </div>
 
       <CartDrawer open={drawerOpen} cartItems={cartItems} count={count} giftWrap={giftWrap} setGiftWrap={setGiftWrap} onClose={closeCart} onRemove={removeFromBag} onUpdateQty={updateQty} onCheckout={checkout} />

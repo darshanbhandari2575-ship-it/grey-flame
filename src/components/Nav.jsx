@@ -1,7 +1,7 @@
 export default function Nav({ onGo, count, onOpenCart }) {
   return (
     <nav>
-      <div className="lg" onClick={() => onGo('home')}>grey<span>·</span>flame</div>
+      <div className="lg" onClick={() => onGo('home')}>greyflames</div>
       <ul>
         <li><a onClick={() => onGo('home')}>home</a></li>
         <li><a onClick={() => onGo('shop')}>shop</a></li>

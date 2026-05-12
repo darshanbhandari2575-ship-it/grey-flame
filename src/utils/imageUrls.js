@@ -63,6 +63,8 @@ const IMAGE_DIMENSIONS = {
 }
 
 export function imageUrl(fileName, width) {
+  if (/^(https?:|data:|blob:)/.test(fileName)) return fileName
+
   if (!CLOUDINARY_BASE_URL || fileName.includes('+')) {
     const dimensions = imageDimensions(fileName)
     const requestedWidth = width || DEFAULT_IMAGE_WIDTH
@@ -82,6 +84,8 @@ export function imageUrl(fileName, width) {
 }
 
 export function imageSrcSet(fileName, widths = [480, 768, 1080]) {
+  if (/^(https?:|data:|blob:)/.test(fileName)) return undefined
+
   const dimensions = imageDimensions(fileName)
   const availableWidths = dimensions ? widths.filter((width) => width <= dimensions.width) : widths
 

@@ -94,6 +94,24 @@ nav .ic{display:flex;gap:18px;font-size:13px;font-weight:500;align-items:center}
 .about-v,.contact-v{padding:140px 36px 120px;max-width:900px;margin:0 auto;text-align:center}
 .about-v h1,.contact-v h1{font-size:clamp(50px,7vw,100px);font-style:italic;font-weight:300;margin-bottom:30px}
 .about-v p,.contact-v p{font-size:17px;color:var(--smoke);max-width:640px;margin:0 auto 20px;line-height:1.8}
+.admin-v{padding:140px 36px 120px;max-width:900px;margin:0 auto}
+.admin-v h1{font-size:clamp(50px,7vw,86px);font-style:italic;font-weight:300;margin-bottom:18px}
+.admin-v p{font-size:15px;color:var(--smoke);line-height:1.7;margin-bottom:22px}
+.admin-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:34px}
+.admin-form{display:grid;gap:16px;padding:24px;border:1px solid rgba(46,42,38,.12);border-radius:6px;background:rgba(228,218,202,.38)}
+.admin-form h3{font-size:24px;font-style:italic;font-weight:400}
+.admin-form label{display:grid;gap:8px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;color:var(--smoke)}
+.admin-form input,.admin-form select,.admin-form textarea{width:100%;border:1px solid rgba(46,42,38,.18);background:rgba(255,255,255,.45);color:var(--char);border-radius:100px;padding:13px 16px;font:inherit;font-size:13px;outline:none}
+.admin-form textarea{min-height:110px;border-radius:14px;resize:vertical}
+.admin-form input:focus,.admin-form select:focus,.admin-form textarea:focus{border-color:var(--ember)}
+.admin-actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
+.admin-msg{margin-top:18px;color:var(--ember)!important}
+.admin-products{display:grid;grid-template-columns:repeat(3,1fr);gap:34px 20px;margin-top:38px}
+.admin-product{cursor:default}
+.admin-card-actions{position:absolute;top:10px;right:10px;z-index:6;display:flex;gap:8px}
+.admin-icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid rgba(46,42,38,.16);background:rgba(242,237,228,.92);color:var(--char);display:grid;place-items:center;cursor:pointer}
+.admin-icon-btn:hover{background:var(--char);color:var(--bone)}
+.admin-icon-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 footer{background:var(--char);color:var(--bone);padding:80px 36px 30px;text-align:center}
 footer .lg{font-size:36px;font-style:italic;margin-bottom:14px;font-family:'Fraunces',serif}footer .lg span{color:var(--ember)}
 footer p{opacity:.7;font-size:13px;margin-bottom:10px}
@@ -119,6 +137,10 @@ footer .links a:hover{opacity:1;color:var(--ember)}
   .rv-grid{grid-template-columns:repeat(2,1fr)}
   .drawer{width:100vw}
   .about-v,.contact-v{padding:120px 18px 80px}
+  .admin-v{padding:120px 18px 80px}
+  .admin-head{display:block}
+  .admin-head .btn{margin-top:18px}
+  .admin-products{grid-template-columns:repeat(2,1fr);gap:30px 14px}
 }
 
 .cat-img {

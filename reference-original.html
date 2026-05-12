@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>grey flame — hand-poured. softly lit.</title><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"><style>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>greyflames — hand-poured. softly lit.</title><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"><style>
 :root{--bone:#F2EDE4;--oat:#E4DACA;--clay:#A8826B;--char:#2E2A26;--ember:#C2542B;--smoke:#7A726A}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--bone);color:var(--char);line-height:1.5;overflow-x:hidden}
@@ -113,7 +113,7 @@ footer .links a:hover{opacity:1;color:var(--ember)}
 
 <div class="view" id="v-product"><div class="pdv" id="pd"></div><div class="rv" id="rvBox" style="display:none"><h3>recently viewed.</h3><div class="rv-grid" id="rvGrid"></div></div></div>
 
-<div class="view" id="v-about"><div class="about-v"><span class="micro" style="color:var(--ember)">the studio</span><h1>made by hand,<br><em>lit by hour.</em></h1><p>grey flame is a quiet little studio working with wax, resin and concrete — shaping pieces that don't shout, but stay with you.</p><p>every piece is poured, set, and finished by hand. no two are quite alike. that's the whole point.</p></div></div>
+<div class="view" id="v-about"><div class="about-v"><span class="micro" style="color:var(--ember)">the studio</span><h1>made by hand,<br><em>lit by hour.</em></h1><p>greyflames is a quiet little studio working with wax, resin and concrete — shaping pieces that don't shout, but stay with you.</p><p>every piece is poured, set, and finished by hand. no two are quite alike. that's the whole point.</p></div></div>
 
 <div class="view" id="v-contact"><div class="contact-v"><span class="micro" style="color:var(--ember)">say hello</span><h1>let's <em>talk.</em></h1><p>WhatsApp us, dm us on instagram, or send a slow letter.</p><p style="margin-top:30px"><a href="https://wa.me/919967483040" class="btn">WhatsApp the studio →</a></p></div></div>
 
@@ -123,7 +123,7 @@ footer .links a:hover{opacity:1;color:var(--ember)}
 <div class="ft"><label class="gw"><input type="checkbox" id="gwChk"> add gift wrap (+₹99)</label><div class="tot"><span>items</span><span id="cntT">0</span></div><button class="btn" onclick="checkout()">checkout via whatsapp →</button></div>
 </div>
 
-<footer><div class="lg">grey<span>·</span>flame</div><p>a small studio of wax, resin and concrete · made in india</p><div class="links"><a onclick="go('home')">home</a><a onclick="go('shop')">shop</a><a onclick="go('about')">about</a><a onclick="go('contact')">contact</a></div><p style="font-size:11px;opacity:.5">© 2026 grey flame · handmade with ♡</p></footer>
+<footer><div class="lg">greyflames</div><p>a small studio of wax, resin and concrete · made in india</p><div class="links"><a onclick="go('home')">home</a><a onclick="go('shop')">shop</a><a onclick="go('about')">about</a><a onclick="go('contact')">contact</a></div><p style="font-size:11px;opacity:.5">© 2026 greyflames · handmade with ♡</p></footer>
 
 <div class="toast" id="toast"></div>
 
@@ -144,7 +144,7 @@ function updateCnt(){const c=cart.reduce((s,x)=>s+x.qty,0);$('cnt').textContent=
 function renderCart(){if(!cart.length){$('cartBody').innerHTML='<div class="empty">your bag is empty.<br>start with something soft.</div>';return}$('cartBody').innerHTML=cart.map(c=>{const p=PRODUCTS.find(x=>x.id===c.id);return`<div class="ci"><div class="im"><img src="images/${p.img}" onerror="this.style.display='none'"></div><div class="it"><h5>${p.name}</h5><div class="qty"><button onclick="updateQ('${c.id}',-1)">−</button>${c.qty}<button onclick="updateQ('${c.id}',1)">+</button></div><button class="rm" onclick="rm('${c.id}')">remove</button></div></div>`}).join('')}
 function openCart(){renderCart();$('drawer').classList.add('open')}
 function closeCart(){$('drawer').classList.remove('open')}
-function checkout(){if(!cart.length){toast('your bag is empty');return}const gw=$('gwChk').checked;let msg='hi grey flame! i\\'d like to order:\\n\\n';cart.forEach(c=>{const p=PRODUCTS.find(x=>x.id===c.id);msg+=`• ${p.name} × ${c.qty}\\n`});if(gw)msg+='\\n+ gift wrap (₹99)';msg+='\\n\\nplease share total & payment details. thank you!';window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank')}
+function checkout(){if(!cart.length){toast('your bag is empty');return}const gw=$('gwChk').checked;let msg='hi greyflames! i\\'d like to order:\\n\\n';cart.forEach(c=>{const p=PRODUCTS.find(x=>x.id===c.id);msg+=`• ${p.name} × ${c.qty}\\n`});if(gw)msg+='\\n+ gift wrap (₹99)';msg+='\\n\\nplease share total & payment details. thank you!';window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank')}
 function askWA(name){window.open(`https://wa.me/${WA}?text=${encodeURIComponent("hi! i'd like to know more about: "+name)}`,'_blank')}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 renderShop();renderCart();

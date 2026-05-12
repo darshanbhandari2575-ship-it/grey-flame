@@ -6,7 +6,7 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
   if (!product) return null
 
   const price = product.price ? `Rs. ${product.price}` : 'Price on request'
-  const dimensions = imageDimensions(product.img)
+  const dimensions = product.imageDimensions || imageDimensions(product.img)
 
   return (
     <>
@@ -40,7 +40,7 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
           <h3>recently viewed.</h3>
           <div className="rv-grid">
             {recentlyViewed.map((item) => {
-              const itemDimensions = imageDimensions(item.img)
+              const itemDimensions = item.imageDimensions || imageDimensions(item.img)
 
               return (
                 <div key={item.id} className="p" onClick={() => onOpen(item.id)}>

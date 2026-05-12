@@ -75,6 +75,7 @@ export const CANDLE_SUBCATEGORIES = [
 
 export function candleSubcategory(product) {
   if (product.category !== 'candles') return null
+  if (product.subcategory) return product.subcategory
 
   const fileName = product.img.toLowerCase()
   const isChristmas = ['christmas', 'santa', 'reindeer', 'xmas', 'snowflake', 'rudolf', 'snowman', 'winter wonderland'].some((term) => fileName.includes(term))

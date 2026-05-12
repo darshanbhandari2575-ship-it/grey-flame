@@ -7,7 +7,7 @@ const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd })
   const [customization, setCustomization] = useState('')
   const isConcrete = product.category === 'concrete'
   const price = product.price ? `Rs. ${product.price}` : 'Price on request'
-  const dimensions = imageDimensions(product.img)
+  const dimensions = product.imageDimensions || imageDimensions(product.img)
   const loading = index < 4 ? 'eager' : 'lazy'
 
   const addWithCustomization = (event) => {
