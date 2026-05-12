@@ -9,7 +9,7 @@ const IMAGE_DIMENSIONS = {
   '3D Christmas candle.webp': { width: 1080, height: 1920 },
   'Big shell.jpg': { width: 8192, height: 4608 },
   'Birthday Photo Resin Plaque.png': { width: 1620, height: 1211 },
-  'Birthday Resin Keepsake.png': { width: 911, height: 1211 },
+  'Birthday Resin Keepsake.png': { width: 687, height: 733 },
   'Bloomed lotus candle_.jpg': { width: 8192, height: 6144 },
   'Bubble tray (1).jpg': { width: 8192, height: 4608 },
   'Chandrika 5.5_ Urli.jpg': { width: 4096, height: 3072 },

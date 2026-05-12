@@ -53,7 +53,7 @@ export const PRODUCTS = [
   { id: 'bq03', name: 'Mini Floral Bouquet', category: 'candles', img: 'IMG-20260204-WA0083.jpg' },
   { id: 'bq04', name: 'Mixed Bloom Cluster', category: 'candles', img: 'IMG_20260120_181010357.jpg' },
 
-  { id: 'rs01', name: 'Ocean Shell Plaque', category: 'resin', img: 'Personalized Seashell Resin Plaque.png' },
+  { id: 'rs01', name: 'Ocean Shell Tooth Preservation Frame', category: 'resin', img: 'Personalized Seashell Resin Plaque.png' },
   { id: 'rs02', name: 'Amethyst Gift Plate', category: 'resin', img: 'Birthday Resin Keepsake.png' },
   { id: 'rs03', name: 'Crystal Thank You Plate', category: 'resin', img: 'Mithra Thank You Resin Plaque.png' },
   { id: 'rs04', name: 'Emerald Photo Plaque', category: 'resin', img: 'Birthday Photo Resin Plaque.png' },
