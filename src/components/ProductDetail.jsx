@@ -1,4 +1,6 @@
 import { memo } from 'react'
+import { motion } from 'framer-motion'
+import { buttonMotion, imageReveal, productCardReveal, smoothReveal, staggerContainer } from '../motion'
 import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
 function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }) {
@@ -10,7 +12,7 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
   return (
     <>
       <div className="pdv">
-        <div className="pim">
+        <motion.div className="pim" variants={imageReveal} initial="hidden" animate="visible">
           <img
             src={imageUrl(product.img, 1080)}
             srcSet={imageSrcSet(product.img, [768, 1080, 1440])}
@@ -19,30 +21,30 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
             width={dimensions?.width}
             height={dimensions?.height}
             loading="eager"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: 'cover' }}
             onError={(e) => { e.currentTarget.style.display = 'none' }}
           />
-        </div>
-        <div className="info">
-          <div className="ct">{product.categoryName || product.categoryId || product.category}</div>
-          <h1>{product.name}</h1>
-          <p className="desc">hand-poured & finished in our small studio. each piece is unique - small variations are part of the craft.</p>
-          <div className="pr-r">{price}</div>
-          <div className="acts">
-            <button className="btn" onClick={() => onAdd(product.id)}>add to bag</button>
-            <button className="btn gh" onClick={() => onAskWhatsApp(product.name)}>ask on whatsapp</button>
-          </div>
-        </div>
+        </motion.div>
+        <motion.div className="info" variants={staggerContainer} initial="hidden" animate="visible">
+          <motion.div className="ct" variants={smoothReveal}>{product.categoryName || product.categoryId || product.category}</motion.div>
+          <motion.h1 variants={smoothReveal}>{product.name}</motion.h1>
+          <motion.p className="desc" variants={smoothReveal}>hand-poured & finished in our small studio. each piece is unique - small variations are part of the craft.</motion.p>
+          <motion.div className="pr-r" variants={smoothReveal}>{price}</motion.div>
+          <motion.div className="acts" variants={smoothReveal}>
+            <motion.button className="btn" onClick={() => onAdd(product.id)} {...buttonMotion}>add to bag</motion.button>
+            <motion.button className="btn gh" onClick={() => onAskWhatsApp(product.name)} {...buttonMotion}>ask on whatsapp</motion.button>
+          </motion.div>
+        </motion.div>
       </div>
       {recentlyViewed.length > 0 && (
-        <div className="rv">
-          <h3>recently viewed.</h3>
-          <div className="rv-grid">
+        <motion.div className="rv" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }}>
+          <motion.h3 variants={smoothReveal}>recently viewed.</motion.h3>
+          <motion.div className="rv-grid" variants={staggerContainer}>
             {recentlyViewed.map((item) => {
               const itemDimensions = item.imageDimensions || imageDimensions(item.img)
 
               return (
-                <div key={item.id} className="p" onClick={() => onOpen(item.id)}>
+                <motion.div key={item.id} className="p" onClick={() => onOpen(item.id)} variants={productCardReveal} whileHover={{ y: -5, scale: 1.012 }} whileTap={buttonMotion.whileTap}>
                   <div className="img">
                     <img
                       src={imageUrl(item.img, 480)}
@@ -52,16 +54,16 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
                       width={itemDimensions?.width}
                       height={itemDimensions?.height}
                       loading="lazy"
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: 'cover' }}
                       onError={(e) => { e.currentTarget.style.display = 'none' }}
                     />
                   </div>
                   <h4>{item.name}</h4>
-                </div>
+                </motion.div>
               )
             })}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </>
   )

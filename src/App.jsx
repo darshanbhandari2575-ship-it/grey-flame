@@ -12,6 +12,8 @@ import { WHATSAPP_NUMBER } from './data/products'
 import { DEFAULT_CATEGORIES, DEFAULT_PRODUCTS, DEFAULT_SUBCATEGORIES, mergeCatalog } from './data/catalogDefaults'
 import { db } from './firebase'
 import { collection, onSnapshot } from 'firebase/firestore'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
+import { fadeUp, pageTransition, staggerContainer } from './motion'
 
 function Toast({ message }) {
   return <div className={`toast ${message ? 'show' : ''}`}>{message}</div>
@@ -147,40 +149,64 @@ export default function App() {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank')
   }, [cart, giftWrap, products])
 
+  const viewContent = useMemo(() => {
+    switch (view) {
+      case 'shop':
+        return (
+          <ProductGrid products={products} categories={categories} subcategories={subcategories} filter={filter} setFilter={setFilter} onOpen={openProduct} onAdd={addToBag} />
+        )
+      case 'product':
+        return (
+          <ProductDetail product={selectedProduct} recentlyViewed={recentlyViewed} onOpen={openProduct} onAdd={addToBag} onAskWhatsApp={askWhatsApp} />
+        )
+      case 'about':
+        return (
+          <motion.div className="about-v" variants={staggerContainer} initial="hidden" animate="visible">
+            <motion.span className="micro" style={{ color: 'var(--ember)' }} variants={fadeUp}>the studio</motion.span>
+            <motion.h1 variants={fadeUp}>made by hand,<br /><em>lit by hour.</em></motion.h1>
+            <motion.p variants={fadeUp}>greyflames is a quiet little studio working with wax, resin and concrete - shaping pieces that don't shout, but stay with you.</motion.p>
+            <motion.p variants={fadeUp}>every piece is poured, set, and finished by hand. no two are quite alike. that's the whole point.</motion.p>
+          </motion.div>
+        )
+      case 'contact':
+        return (
+          <motion.div className="contact-v" variants={staggerContainer} initial="hidden" animate="visible">
+            <motion.span className="micro" style={{ color: 'var(--ember)' }} variants={fadeUp}>say hello</motion.span>
+            <motion.h1 variants={fadeUp}>let&apos;s <em>talk.</em></motion.h1>
+            <motion.p variants={fadeUp}>WhatsApp us, dm us on instagram, or send a slow letter.</motion.p>
+            <motion.p style={{ marginTop: '30px' }} variants={fadeUp}>
+              <motion.a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn" whileHover={{ scale: 1.025 }} whileTap={{ scale: 0.975 }} transition={{ type: 'spring', stiffness: 260, damping: 26, mass: 0.75 }}>WhatsApp the studio</motion.a>
+            </motion.p>
+          </motion.div>
+        )
+      case 'admin':
+        return <AdminPanel categories={categories} subcategories={subcategories} products={products} onGoHome={goHome} />
+      case 'home':
+      default:
+        return (
+          <>
+            <Hero />
+            <Marquee />
+            <Categories categories={categories} onSelect={selectCategory} />
+          </>
+        )
+    }
+  }, [addToBag, askWhatsApp, categories, filter, goHome, openProduct, products, recentlyViewed, selectCategory, selectedProduct, setFilter, subcategories, view])
+
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <div className="grain"></div>
       <Nav onGo={go} count={count} onOpenCart={openCart} />
 
-      <div className={`view ${view === 'home' ? 'active' : ''}`}>
-        <Hero />
-        <Marquee />
-        <Categories categories={categories} onSelect={selectCategory} />
-      </div>
-
-      <div className={`view ${view === 'shop' ? 'active' : ''}`}>
-        <ProductGrid products={products} categories={categories} subcategories={subcategories} filter={filter} setFilter={setFilter} onOpen={openProduct} onAdd={addToBag} />
-      </div>
-
-      <div className={`view ${view === 'product' ? 'active' : ''}`}>
-        <ProductDetail product={selectedProduct} recentlyViewed={recentlyViewed} onOpen={openProduct} onAdd={addToBag} onAskWhatsApp={askWhatsApp} />
-      </div>
-
-      <div className={`view ${view === 'about' ? 'active' : ''}`}>
-        <div className="about-v"><span className="micro" style={{ color: 'var(--ember)' }}>the studio</span><h1>made by hand,<br /><em>lit by hour.</em></h1><p>greyflames is a quiet little studio working with wax, resin and concrete - shaping pieces that don't shout, but stay with you.</p><p>every piece is poured, set, and finished by hand. no two are quite alike. that's the whole point.</p></div>
-      </div>
-
-      <div className={`view ${view === 'contact' ? 'active' : ''}`}>
-        <div className="contact-v"><span className="micro" style={{ color: 'var(--ember)' }}>say hello</span><h1>let&apos;s <em>talk.</em></h1><p>WhatsApp us, dm us on instagram, or send a slow letter.</p><p style={{ marginTop: '30px' }}><a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn">WhatsApp the studio</a></p></div>
-      </div>
-
-      <div className={`view ${view === 'admin' ? 'active' : ''}`}>
-        <AdminPanel categories={categories} subcategories={subcategories} products={products} onGoHome={goHome} />
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.main key={view} className="view active" {...pageTransition}>
+          {viewContent}
+        </motion.main>
+      </AnimatePresence>
 
       <CartDrawer open={drawerOpen} cartItems={cartItems} count={count} giftWrap={giftWrap} setGiftWrap={setGiftWrap} onClose={closeCart} onRemove={removeFromBag} onUpdateQty={updateQty} onCheckout={checkout} />
       <Footer onGo={go} />
       <Toast message={toastMessage} />
-    </>
+    </MotionConfig>
   )
 }
