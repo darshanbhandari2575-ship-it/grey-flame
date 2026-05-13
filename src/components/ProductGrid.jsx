@@ -1,11 +1,10 @@
 import { memo, useState } from 'react'
-import { CANDLE_SUBCATEGORIES, CATS, candleSubcategory } from '../data/products'
 import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
 const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd }) {
   const [customizing, setCustomizing] = useState(false)
   const [customization, setCustomization] = useState('')
-  const isConcrete = product.category === 'concrete'
+  const isConcrete = product.categoryId === 'concrete' || product.category === 'concrete'
   const price = product.price ? `Rs. ${product.price}` : 'Price on request'
   const dimensions = product.imageDimensions || imageDimensions(product.img)
   const loading = index < 4 ? 'eager' : 'lazy'
@@ -41,7 +40,7 @@ const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd })
         </div>
       </div>
       <h4 onClick={() => onOpen(product.id)}>{product.name}</h4>
-      <div className="pr">{CATS[product.category]} · {price}</div>
+      <div className="pr">{product.categoryName || product.category} · {price}</div>
       {customizing && (
         <div className="custom-box" onClick={(e) => e.stopPropagation()}>
           <input
@@ -60,33 +59,36 @@ const ProductCard = memo(function ProductCard({ product, index, onOpen, onAdd })
   )
 })
 
-function ProductGrid({ products, filter, setFilter, onOpen, onAdd }) {
-  const isCandleFilter = filter === 'candles' || filter.startsWith('candles:')
-  const candleFilter = filter.startsWith('candles:') ? filter.split(':')[1] : null
+function ProductGrid({ products, categories, subcategories, filter, setFilter, onOpen, onAdd }) {
+  const [filterType, filterId] = filter.includes(':') ? filter.split(':') : ['category', filter]
+  const selectedCategory = filterType === 'subcategory'
+    ? subcategories.find((subcategory) => subcategory.id === filterId)?.categoryId
+    : filterId
+  const visibleSubcategories = subcategories.filter((subcategory) => subcategory.categoryId === selectedCategory)
   const list = filter === 'all'
     ? products
-    : isCandleFilter
-      ? products.filter((product) => product.category === 'candles' && (!candleFilter || candleSubcategory(product) === candleFilter))
-      : products.filter((p) => p.category === filter)
+    : filterType === 'subcategory'
+      ? products.filter((product) => product.subcategoryId === filterId)
+      : products.filter((product) => product.categoryId === filterId || product.category === filterId)
 
   return (
     <>
       <div className="shop-h"><span className="micro" style={{ color: 'var(--ember)' }}>the studio</span><h2>everything we make.</h2></div>
       <div className="fl">
         <button className={filter === 'all' ? 'on' : ''} onClick={() => setFilter('all')}>all</button>
-        {Object.keys(CATS).map((key) => (
-          <button key={key} className={(key === 'candles' ? isCandleFilter : filter === key) ? 'on' : ''} onClick={() => setFilter(key)}>{CATS[key]}</button>
+        {categories.map((category) => (
+          <button key={category.id} className={selectedCategory === category.id ? 'on' : ''} onClick={() => setFilter(category.id)}>{category.name}</button>
         ))}
       </div>
-      {isCandleFilter && (
+      {visibleSubcategories.length > 0 && (
         <div className="fl">
-          {CANDLE_SUBCATEGORIES.map((subcategory) => (
+          {visibleSubcategories.map((subcategory) => (
             <button
-              key={subcategory.key}
-              className={candleFilter === subcategory.key ? 'on' : ''}
-              onClick={() => setFilter(`candles:${subcategory.key}`)}
+              key={subcategory.id}
+              className={filterType === 'subcategory' && filterId === subcategory.id ? 'on' : ''}
+              onClick={() => setFilter(`subcategory:${subcategory.id}`)}
             >
-              {subcategory.label}
+              {subcategory.name}
             </button>
           ))}
         </div>

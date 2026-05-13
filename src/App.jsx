@@ -8,8 +8,10 @@ import ProductDetail from './components/ProductDetail'
 import CartDrawer from './components/CartDrawer'
 import Footer from './components/Footer'
 import AdminPanel from './components/AdminPanel'
-import { PRODUCTS, WHATSAPP_NUMBER } from './data/products'
-import { readAdminProducts } from './utils/adminProducts'
+import { WHATSAPP_NUMBER } from './data/products'
+import { DEFAULT_CATEGORIES, DEFAULT_PRODUCTS, DEFAULT_SUBCATEGORIES, mergeCatalog } from './data/catalogDefaults'
+import { db } from './firebase'
+import { collection, onSnapshot } from 'firebase/firestore'
 
 function Toast({ message }) {
   return <div className={`toast ${message ? 'show' : ''}`}>{message}</div>
@@ -18,7 +20,9 @@ function Toast({ message }) {
 export default function App() {
   const [view, setView] = useState(() => window.location.pathname === '/admin' ? 'admin' : 'home')
   const [filter, setFilter] = useState('all')
-  const [adminProducts, setAdminProducts] = useState(() => readAdminProducts())
+  const [firestoreCategories, setFirestoreCategories] = useState([])
+  const [firestoreSubcategories, setFirestoreSubcategories] = useState([])
+  const [firestoreProducts, setFirestoreProducts] = useState([])
   const [cart, setCart] = useState([])
   const [recent, setRecent] = useState([])
   const [selectedId, setSelectedId] = useState(null)
@@ -27,13 +31,19 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState('')
 
   const count = useMemo(() => cart.reduce((sum, item) => sum + item.qty, 0), [cart])
-  const products = useMemo(() => {
-    const adminById = new Map(adminProducts.map((product) => [product.id, product]))
-    const mergedProducts = PRODUCTS.map((product) => adminById.get(product.id) || product)
-    const addedProducts = adminProducts.filter((product) => !PRODUCTS.some((item) => item.id === product.id))
+  const categories = useMemo(() => mergeCatalog(DEFAULT_CATEGORIES, firestoreCategories), [firestoreCategories])
+  const subcategories = useMemo(() => mergeCatalog(DEFAULT_SUBCATEGORIES, firestoreSubcategories), [firestoreSubcategories])
+  const products = useMemo(() => mergeCatalog(DEFAULT_PRODUCTS, firestoreProducts).map((product) => {
+    const categoryId = product.categoryId || product.category
+    const category = categories.find((item) => item.id === categoryId)
 
-    return [...mergedProducts, ...addedProducts]
-  }, [adminProducts])
+    return {
+      ...product,
+      category: categoryId,
+      categoryId,
+      categoryName: category?.name || categoryId,
+    }
+  }), [categories, firestoreProducts])
   const selectedProduct = useMemo(() => products.find((item) => item.id === selectedId) || null, [products, selectedId])
   const recentlyViewed = useMemo(() => recent.filter((id) => id !== selectedId).slice(0, 4).map((id) => products.find((item) => item.id === id)).filter(Boolean), [products, recent, selectedId])
   const cartItems = useMemo(() => cart.map((item) => ({ ...item, product: products.find((p) => p.id === item.id) })).filter((item) => item.product), [cart, products])
@@ -47,6 +57,24 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [view])
+
+  useEffect(() => {
+    const unsubscribeCategories = onSnapshot(collection(db, 'categories'), (snapshot) => {
+      setFirestoreCategories(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })))
+    })
+    const unsubscribeSubcategories = onSnapshot(collection(db, 'subcategories'), (snapshot) => {
+      setFirestoreSubcategories(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })))
+    })
+    const unsubscribeProducts = onSnapshot(collection(db, 'products'), (snapshot) => {
+      setFirestoreProducts(snapshot.docs.map((item) => ({ id: item.id, ...item.data() })))
+    })
+
+    return () => {
+      unsubscribeCategories()
+      unsubscribeSubcategories()
+      unsubscribeProducts()
+    }
+  }, [])
 
   const go = useCallback((nextView) => {
     if (nextView === 'admin') {
@@ -127,11 +155,11 @@ export default function App() {
       <div className={`view ${view === 'home' ? 'active' : ''}`}>
         <Hero />
         <Marquee />
-        <Categories onSelect={selectCategory} />
+        <Categories categories={categories} onSelect={selectCategory} />
       </div>
 
       <div className={`view ${view === 'shop' ? 'active' : ''}`}>
-        <ProductGrid products={products} filter={filter} setFilter={setFilter} onOpen={openProduct} onAdd={addToBag} />
+        <ProductGrid products={products} categories={categories} subcategories={subcategories} filter={filter} setFilter={setFilter} onOpen={openProduct} onAdd={addToBag} />
       </div>
 
       <div className={`view ${view === 'product' ? 'active' : ''}`}>
@@ -147,7 +175,7 @@ export default function App() {
       </div>
 
       <div className={`view ${view === 'admin' ? 'active' : ''}`}>
-        <AdminPanel products={products} onGoHome={goHome} onProductsChange={setAdminProducts} />
+        <AdminPanel categories={categories} subcategories={subcategories} products={products} onGoHome={goHome} />
       </div>
 
       <CartDrawer open={drawerOpen} cartItems={cartItems} count={count} giftWrap={giftWrap} setGiftWrap={setGiftWrap} onClose={closeCart} onRemove={removeFromBag} onUpdateQty={updateQty} onCheckout={checkout} />

@@ -1,0 +1,29 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && (
+          request.auth.token.email == 'greyflame108@gmail.com'
+          || request.auth.token.email == 'darshanbhandari2575@gmail.com'
+        );
+    }
+
+    match /categories/{document} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /subcategories/{document} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /products/{document} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}

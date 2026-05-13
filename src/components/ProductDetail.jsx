@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { CATS } from '../data/products'
 import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
 function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }) {
@@ -25,7 +24,7 @@ function ProductDetail({ product, recentlyViewed, onOpen, onAdd, onAskWhatsApp }
           />
         </div>
         <div className="info">
-          <div className="ct">{CATS[product.category]}</div>
+          <div className="ct">{product.categoryName || product.categoryId || product.category}</div>
           <h1>{product.name}</h1>
           <p className="desc">hand-poured & finished in our small studio. each piece is unique - small variations are part of the craft.</p>
           <div className="pr-r">{price}</div>

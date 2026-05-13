@@ -1,19 +1,17 @@
 import { memo } from 'react'
 import { imageDimensions, imageSrcSet, imageUrl } from '../utils/imageUrls'
 
-const categories = [
-  ['concrete', '01', 'Concrete Art', 'Big shell.jpg'],
-  ['candles', '02', 'Candles', 'Bloomed lotus candle_.jpg'],
-  ['resin', '03', 'Resin', 'resin-art.jpg'],
-]
-
-function Categories({ onSelect }) {
+function Categories({ categories, onSelect }) {
   return (
     <section className="cats">
       <h2>three quiet collections.</h2>
 
       <div className="cg">
-        {categories.map(([key, num, title, img]) => {
+        {categories.map((category, index) => {
+          const key = category.id
+          const num = String(index + 1).padStart(2, '0')
+          const title = category.name
+          const img = category.image || 'resin-art.jpg'
           const dimensions = imageDimensions(img)
 
           return (
